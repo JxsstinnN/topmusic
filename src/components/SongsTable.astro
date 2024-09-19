@@ -1,0 +1,82 @@
+---
+import { Icon } from "astro-icon";
+import InlineArtists from "./InlineArtists.astro";
+import PlayButton from "./PlayButton.astro";
+import { formatTime } from '../lib/helpers';
+const { songs } = Astro.props;
+---
+
+<table class="table-auto text-left min-w-full divide-y-2 divide-gray-500/30">
+  <thead>
+    <tr class="text-gray-300">
+      <th class="font-normal px-4 py-2 whitespace-nowrap">#</th>
+      <th class="font-normal px-4 py-2 whitespace-nowrap">Title</th>
+      <th class="font-normal px-4 py-2 whitespace-nowrap">Album</th>
+      <th class="font-normal px-4 py-2 whitespace-nowrap text-right">
+        <Icon name="carbon:time" class="inline-block h-5 w-5" />
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    {
+      songs.map((song, index) => (
+        <tr class="group hover:bg-gray-500/20 cursor-pointer" data-preview-url={song.track.preview_url}>
+          <td class="whitespace-nowrap px-4 py-2 track-number">
+            {index + 1}
+          </td>
+          <td class="whitespace-nowrap px-4 py-2 flex gap-3 items-center">
+            <div class="h-10 w-10">
+              <img
+                src={song.track.album.images[0].url}
+                alt={song.track.name}
+                class="rounded object-cover h-full w-full shadow-[5px_0_30px_0px_rgba(0,0,0,0.3)]"
+              />
+            </div>
+            <div class="leading-none">
+              <a
+                href="#"
+                class="text-gray-300 group-hover:text-white hover:underline text-sm"
+              >
+                {song.track.name}
+              </a>
+              <div class="text-sm text-gray-300 group-hover:text-white">
+                {<InlineArtists artists={song.track.artists} />}
+              </div>
+            </div>
+          </td>
+          <td class="whitespace-nowrap px-4 py-2">
+            <a
+              href="#"
+              class="text-gray-300 group-hover:text-white hover:underline text-sm"
+            >
+              {song.track.album.name}
+            </a>
+          </td>
+          <td class="whitespace-nowrap px-4 py-2 text-right">
+            {formatTime(song.track.duration_ms)}
+          </td>
+        </tr>
+      ))
+    }
+  </tbody>
+</table>
+
+<script>
+  const table = document.querySelector('table tbody');
+  const rows = table.querySelectorAll('tr');
+
+  rows.forEach(row => {
+    row.addEventListener('click', (e) => {
+
+      const previewUrl = e.currentTarget.dataset.previewUrl;
+
+      if (!previewUrl) return;
+
+      const audio = new Audio(previewUrl);
+
+      audio.play();
+
+    });
+  });
+
+</script>

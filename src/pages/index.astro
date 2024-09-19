@@ -1,10 +1,21 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import PageHeader from '../components/PageHeader.astro';
-import { playlists } from '../lib/data';
-import PlaylistItemCard from '../components/PlaylistItemCard.astro';
----
+import PlaylistItemCard from '../components/CategoryItemCard.astro';
 
+import { getSpotifyAccessToken } from '../utils/spotify';
+
+const accessToken = await getSpotifyAccessToken();
+
+const playlists1 = await fetch('https://api.spotify.com/v1/browse/categories?limit=10&es_rd', {
+  headers: {
+    Authorization: `Bearer ${accessToken}`
+  }
+}).then(res => res.json());
+
+const playlist = playlists1.categories.items;
+
+---
 <Layout title="TopMusic | Inicio">
 		<div
     id="playlist-container"
@@ -19,7 +30,7 @@ import PlaylistItemCard from '../components/PlaylistItemCard.astro';
       <div
         class="grid gap-y-4 gap-x-6 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 mt-6"
       >
-        { playlists.map((playlist) => <PlaylistItemCard playlist={playlist}/>) }
+        { playlist.map((playlist) => <PlaylistItemCard playlist={playlist}/>) }
       </div>
     </div>
     <div
@@ -27,6 +38,11 @@ import PlaylistItemCard from '../components/PlaylistItemCard.astro';
     >
     </div>
   </div>
+  <div class="px-6 relative z-10 mt-4">
+    <h2 class="text-2xl font-bold">Canciones Recomendadas</h2>
+    <div class="flex flex-wrap mt-6 gap-4">
+      
+    </div>
+  </div>
 
 </Layout>
-

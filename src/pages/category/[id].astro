@@ -1,0 +1,29 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { getSpotifyAccessToken } from "../../utils/spotify";
+import PageHeader from '../../components/PageHeader.astro';
+import PlaylistCard from "../../components/PlaylistCard.astro";
+const { id } = Astro.params;
+
+const accessToken = await getSpotifyAccessToken();
+
+const response = await fetch(`https://api.spotify.com/v1/browse/categories/${id}/playlists?limit=10`, {
+  headers: {
+    Authorization: `Bearer ${accessToken}`
+  }
+});
+
+const playlistsByCategory = await response.json();
+---
+
+<Layout title="TopMusic | Playlist por Categoria">
+  <PageHeader />
+  <div class="px-6 relative z-10 mt-4">
+    <h2 class="text-2xl font-bold">Playlist Recomendadas</h2>
+    <div class="flex flex-wrap mt-6 gap-4">
+        {playlistsByCategory.playlists?.items.map((playlist) => (
+          <PlaylistCard playlist={playlist} />
+        ))}
+    </div>
+  </div>
+</Layout>
