@@ -13,6 +13,7 @@ const playlists1 = await fetch('https://api.spotify.com/v1/browse/categories?lim
   }
 }).then(res => res.json());
 
+
 const playlist = playlists1.categories.items;
 
 ---
@@ -30,7 +31,7 @@ const playlist = playlists1.categories.items;
       <div
         class="grid gap-y-4 gap-x-6 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 mt-6"
       >
-        { playlist.map((playlist) => <PlaylistItemCard playlist={playlist}/>) }
+        {playlist.map((playlist) => <PlaylistItemCard playlist={playlist}/>) }
       </div>
     </div>
     <div

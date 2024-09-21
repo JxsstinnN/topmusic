@@ -1,54 +1,36 @@
-# Astro Starter Kit: Basics
+# TopMusic 🎶
+**Web de las Canciones más Escuchadas**
 
-```sh
-npm create astro@latest -- --template basics
-```
+TopMusic es una plataforma web que permite a los usuarios visualizar las canciones más escuchadas a nivel global. Utilizando la API de Spotify, ofrece acceso a las listas de reproducción más populares, géneros musicales variados, y rankings de canciones en tiempo real.
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/basics)
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/astro/tree/latest/examples/basics)
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/withastro/astro?devcontainer_path=.devcontainer/basics/devcontainer.json)
+## Descripción del Proyecto 📜
+El objetivo de TopMusic es proporcionar una interfaz sencilla y clara para que los usuarios puedan explorar la música más popular del momento, descubrir nuevos géneros y acceder fácilmente a las listas de éxitos, tanto globales como nacionales. Además, permite reproducir canciones y seguir listas directamente desde Spotify.
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## Características Principales ✨
+### 1. **Integración con la API de Spotify** 
+   - Obtener datos en tiempo real sobre las canciones más populares.
+   - Mostrar listas de reproducción categorizadas por géneros musicales.
+   - Acceso a las listas de éxitos globales y nacionales.
 
-![just-the-basics](https://github.com/withastro/astro/assets/2244813/a0a5533c-a856-4198-8470-2d67b1d7c554)
+### 2. **Ranking de Canciones** 
+   - Sección dedicada a mostrar el top 10 de canciones más escuchadas a nivel global.
+   - Actualización automática del ranking semanalmente.
 
-## 🚀 Project Structure
+### 3. **Exploración por Géneros** 
+   - Lista de géneros musicales como pop, rock, reggaetón, jazz, entre otros.
+   - Acceso a playlists populares dentro de cada género.
 
-Inside of your Astro project, you'll see the following folders and files:
+### 4. **Diseño Minimalista** 
+   - Interfaz sencilla y clara para mejorar la experiencia del usuario.
+   - Foco en la presentación de canciones y listas de reproducción.
 
-```text
-/
-├── public/
-│   └── favicon.svg
-├── src/
-│   ├── components/
-│   │   └── Card.astro
-│   ├── layouts/
-│   │   └── Layout.astro
-│   └── pages/
-│       └── index.astro
-└── package.json
-```
+### 5. **Enlaces Directos a Spotify** 
+   - Posibilidad de reproducir canciones desde Spotify a través de enlaces.
+   - Botones para seguir listas de reproducción o artistas directamente desde la página.
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+## Instalación y Configuración ⚙️
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+1. Clona el repositorio:
 
-Any static assets, like images, can be placed in the `public/` directory.
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+   ```bash
+   git clone https://github.com/usuario/topmusic.git
