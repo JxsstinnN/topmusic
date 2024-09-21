@@ -1,10 +1,10 @@
 ---
 const { id } = Astro.params;
-import InlineArtists from "../../components/InlineArtists.astro";
+import Layout from "../../layouts/Layout.astro";
 import SongsTable from "../../components/SongsTable.astro";
 import PageHeader from "../../components/PageHeader.astro";
 import PlayButton from "../../components/PlayButton.astro";
-import Layout from "../../layouts/Layout.astro";
+import SongPlayer from "../../components/SongPlayer.astro";
 import { getSpotifyAccessToken } from "../../utils/spotify";
 
 const accessToken = await getSpotifyAccessToken();
@@ -43,7 +43,7 @@ const playlist = await response.json();
       <div class="flex flex-col justify-between">
         <div class="flex flex-1 items-end">Playlist</div>
         <div>
-          <h1 class="title-clamp font-bold block">
+          <h1 class="title-clamp font-bold block pb-3">
             {playlist?.name}
             <span transition:name=`playlist ${playlist?.id} title`></span>
           </h1>
@@ -52,9 +52,7 @@ const playlist = await response.json();
           <div class="text-sm">
             {playlist?.description}
             <div class="mt-1">
-              <span class="font-semibold">66 likes</span>, 83 musics, <span
-                class="text-gray-300">Hace 1 minuto</span
-              >
+              <span class="font-semibold">{playlist.tracks.items.length} Canciones</span>
             </div>
           </div>
         </div>

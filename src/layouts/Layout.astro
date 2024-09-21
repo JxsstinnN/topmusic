@@ -30,6 +30,14 @@ import "./layout.css";
       </div>
     </div>
 
+		<script>
+			document.addEventListener("astro:page-load", () => {
+        for (const el of document.querySelectorAll(".el-to-fade")) {
+          el.classList.remove("scale-90");
+        }
+      });
+		</script>
+
 	</body>
 </html>
 

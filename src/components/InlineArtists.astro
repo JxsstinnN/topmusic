@@ -2,17 +2,20 @@
 const { artists } = Astro.props;
 ---
 
-{
-  artists.map((artist, index) => {
-    return (
-      <>
-        <a href={"#"} class="hover:underline">
-          {artist.name}
-        </a>
-        <span class="text-gray-300">
-          {index === artists.length - 1 ? " " : ", "}
-        </span>
-      </>
-    );
-  })
-}
+<div>
+  {
+    artists.slice(0, 5).map((artist, index) => {
+      return (
+        <>
+          <a href={"#"} class="hover:underline">
+            {artist.name}
+          </a>
+          <span class="text-gray-300">
+            {index === Math.min(artists.length, 5) - 1 ? " " : ", "}
+          </span>
+        </>
+      );
+    })
+  }
+  {artists.length > 5 && <span class="text-gray-500">... y más</span>}
+</div>

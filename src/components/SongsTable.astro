@@ -2,15 +2,17 @@
 import { Icon } from "astro-icon";
 import InlineArtists from "./InlineArtists.astro";
 import PlayButton from "./PlayButton.astro";
-import { formatTime } from '../lib/helpers';
+import { formatTime } from "../lib/helpers";
 const { songs } = Astro.props;
----
 
+const filteredPlaylist = songs.filter(song => song.track.preview_url);
+
+---
 <table class="table-auto text-left min-w-full divide-y-2 divide-gray-500/30">
   <thead>
     <tr class="text-gray-300">
       <th class="font-normal px-4 py-2 whitespace-nowrap">#</th>
-      <th class="font-normal px-4 py-2 whitespace-nowrap">Title</th>
+      <th class="font-normal px-4 py-2 whitespace-nowrap">Titulo</th>
       <th class="font-normal px-4 py-2 whitespace-nowrap">Album</th>
       <th class="font-normal px-4 py-2 whitespace-nowrap text-right">
         <Icon name="carbon:time" class="inline-block h-5 w-5" />
@@ -19,8 +21,11 @@ const { songs } = Astro.props;
   </thead>
   <tbody>
     {
-      songs.map((song, index) => (
-        <tr class="group hover:bg-gray-500/20 cursor-pointer" data-preview-url={song.track.preview_url}>
+      filteredPlaylist.map((song, index) => (
+        <tr
+          class="group hover:bg-gray-500/20 cursor-pointer"
+          data-preview-url={song.track.preview_url}
+        >
           <td class="whitespace-nowrap px-4 py-2 track-number">
             {index + 1}
           </td>
@@ -35,9 +40,9 @@ const { songs } = Astro.props;
             <div class="leading-none">
               <a
                 href="#"
-                class="text-gray-300 group-hover:text-white hover:underline text-sm"
+                class="text-gray-300 group-hover:text-white hover:underline text-sm overflow-hidden"
               >
-                {song.track.name}
+                {song.track.name.slice(0,40)}
               </a>
               <div class="text-sm text-gray-300 group-hover:text-white">
                 {<InlineArtists artists={song.track.artists} />}
@@ -49,7 +54,7 @@ const { songs } = Astro.props;
               href="#"
               class="text-gray-300 group-hover:text-white hover:underline text-sm"
             >
-              {song.track.album.name}
+              {song.track.album.name.slice(0,40)}
             </a>
           </td>
           <td class="whitespace-nowrap px-4 py-2 text-right">
@@ -61,22 +66,92 @@ const { songs } = Astro.props;
   </tbody>
 </table>
 
-<script>
-  const table = document.querySelector('table tbody');
-  const rows = table.querySelectorAll('tr');
+<script is:inline>
 
-  rows.forEach(row => {
-    row.addEventListener('click', (e) => {
+  if (!window.currentAudio && !window.currentRow) {
+    let currentAudio = null;
+    let currentRow = null;
 
-      const previewUrl = e.currentTarget.dataset.previewUrl;
+    const handlePlayPause = (row, previewUrl) => {
+      if (currentAudio && currentAudio.src === previewUrl) {
 
-      if (!previewUrl) return;
+        // Si el audio actual ya es el que se está reproduciendo
 
-      const audio = new Audio(previewUrl);
+        if (currentAudio.paused) {
+          currentAudio.play().catch((error) => {
+            console.error("Error reanudando el audio", error);
+          });
+          updateRowIcon(row, true);  // Aqui muestro el número que tiene la canción
+        } else {
+          currentAudio.pause();
+          updateRowIcon(row, false); // aqui muestro el icono de play
+        }
+      } else {
 
-      audio.play();
+        // Cambiar de canción
+        if (currentAudio) {
+          currentAudio.pause();
+          currentAudio.currentTime = 0;
+          updateRowIcon(currentRow, false); 
+        }
 
+        if (!currentAudio) {
+          currentAudio = new Audio(previewUrl);
+          currentAudio.volume = 0.3;
+        } else {
+          currentAudio.src = previewUrl;
+        }
+
+        if(currentRow) 
+          currentRow.classList.remove('bg-green-800/30');
+
+        currentRow = row;
+        row.classList.add('bg-green-800/30');
+        
+        currentAudio.play().catch((error) => {
+          console.error("Error reproduciendo el audio", error);
+        });
+        updateRowIcon(row, true); 
+
+        window.currentAudio = currentAudio;
+        window.currentRow = currentRow;
+      }
+    };
+
+    const updateRowIcon = (row, isPlaying) => {
+      const trackNumber = row.querySelector(".track-number");
+      if (trackNumber) {
+        if (!row.dataset.trackIndex) {
+          row.dataset.trackIndex = trackNumber.innerText;
+        }
+        trackNumber.innerHTML = isPlaying
+          ? '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24"><path fill="currentColor" d="M8 5.14v14l11-7z"/></svg>'
+          : row.dataset.trackIndex; // Número de la canción
+      }
+    };
+
+    document.querySelector("table tbody").addEventListener("click", (e) => {
+      const row = e.target.closest("tr");
+      if (row) {
+        const previewUrl = row.dataset.previewUrl;
+        if (previewUrl) {
+          handlePlayPause(row, previewUrl);
+        }
+      }
     });
-  });
+
+  }
+
+  document.addEventListener('astro:after-swap', () => {
+    if(window.currentRow && window.currentAudio) {
+      window.currentAudio.pause();
+      window.currentAudio.currentTime = 0;
+      window.currentAudio = undefined;
+
+      window.currentRow = undefined;
+    }
+  })
 
 </script>
+
+
